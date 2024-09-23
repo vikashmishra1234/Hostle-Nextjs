@@ -3,24 +3,53 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "vikash": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.0",
+    "@mui/material": "^6.1.0",
+    "@mui/x-data-grid": "^7.17.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/react-slick": "^0.23.13",
+    "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^11.5.4",
+    "lucide-react": "^0.445.0",
+    "mongoose": "^8.6.3",
+    "next": "14.2.11",
+    "next-auth": "^4.24.7",
+    "nodemailer": "^6.9.15",
+    "pg": "^8.13.0",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.11"
+    "react-fast-marquee": "^1.6.5",
+    "react-multi-carousel": "^2.8.5",
+    "react-responsive-carousel": "^3.2.23",
+    "react-scroll-parallax": "^3.4.5",
+    "react-slick": "^0.30.2",
+    "react-spinners": "^0.14.1",
+    "react-type-animation": "^3.2.0",
+    "recharts": "^2.12.7",
+    "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.14.1",
+    "swiper": "^11.1.14"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.16",
+    "@types/pg": "^8.11.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.11",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.11"
+    "typescript": "^5"
   }
 }
