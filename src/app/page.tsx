@@ -6,7 +6,7 @@ import HomeCard from '@/Components/HomeCard';
 import HomeForm from '@/Components/HomeForm';
 
 import Land from '@/Land';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import React from 'react';
 import CollegeFooter from './Footer';
 
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
         }
       </Container>
         <Container maxWidth={false} sx={{maxWidth:'1300px'}}>
-        <h3 className='text-[1.8rem] font-bold text-[brown]'>Inside the Hostle</h3>
+        <h3 className='text-[1.8rem] md:text-[2.5rem] font-bold text-[brown]'>Inside the Hostle</h3>
       <ImageCarousel/>
       <HomeForm/>
         </Container>

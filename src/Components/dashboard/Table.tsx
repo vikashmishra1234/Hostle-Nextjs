@@ -61,7 +61,7 @@ const Table:React.FC = () => {
             <td style={{ border: '1px solid black', padding: '8px' }}>{student.studentYear}</td>
             <td style={{ border: '1px solid black', padding: '8px' }}>{student.studentAddress+"vildj af l dfjlkd dfajkljf"}</td>
             <td style={{ border: '1px solid black', padding: '8px' }}>
-              <input type="checkbox" checked={student.feeStatus} onChange={(e:any)=>handleChange(student._id)}  />
+              <input type="checkbox" checked={student.feeStatus} onChange={()=>handleChange(student._id)}  />
             </td>
           </tr>
         ))}

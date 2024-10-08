@@ -1,6 +1,6 @@
 "use client"
 import { addFeedback } from '@/app/utils';
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import {motion} from 'framer-motion'
 import Swal from 'sweetalert2'
@@ -48,7 +48,7 @@ const FeedbackButton:React.FC<any> = ({user}) => {
   className="text-[1.9rem] text-[brown]"
   onClick={() => setShow(!show)}
 >
-  Give Feedback on Today's Meal
+  Give Feedback on Today&apos; Meal
 </motion.div>
 
         <motion.div initial={{ width: "0%", opacity: 0,margin:'auto' }}

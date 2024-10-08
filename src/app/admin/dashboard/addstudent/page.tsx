@@ -1,6 +1,6 @@
-"use client"
-import React, { useState } from 'react';
-import axios from 'axios'
+"use client";
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
 import {
   TextField,
   Button,
@@ -8,9 +8,23 @@ import {
   Typography,
   Box,
 } from '@mui/material';
+import Swal from 'sweetalert2';
+
+interface StudentFormData {
+  studentName: string;
+  rollNumber: string;
+  studentPhone: string;
+  studentEmail: string;
+  studentFatherName: string;
+  studentAddress: string;
+  studentYear: string;
+  studentBranch: string;
+  studentFatherPhone: string;
+  studentPassword: string;
+}
 
 const StudentForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<StudentFormData>({
     studentName: '',
     rollNumber: '',
     studentPhone: '',
@@ -23,7 +37,7 @@ const StudentForm = () => {
     studentPassword: '',
   });
 
-  const handleChange = (e:any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -31,21 +45,32 @@ const StudentForm = () => {
     });
   };
 
-  const handleSubmit = async(e:any) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log(formData);
     try {
-        const res = await axios.post('http://localhost:3000/api/addstudent',formData);
-        console.log(res);
-    } catch (error:any) {
-        console.log(error)
+      const res = await axios.post('http://localhost:3000/api/addstudent', formData);
+      if(res && res?.data.message){
+        Swal.fire({
+          icon:'success',
+          title:'Success !',
+          text:res?.data?.message || "student added successfully"
+        })
+      }
+    } catch (error) {
+      Swal.fire({
+        icon:'error',
+        title:'Opps !',
+        text:"Unable add student"
+      })
+      console.log(error);
     }
   };
 
   return (
-    <Container component="main" >
+    <Container component="main">
       <Box sx={{ mt: 4 }}>
-        <Typography sx={{textAlign:'center',fontWeight:'bold',color:"brown"}} component="h1" variant="h4">
+        <Typography sx={{ textAlign: 'center', fontWeight: 'bold', color: 'brown' }} component="h1" variant="h4">
           Student Information Form
         </Typography>
         <form onSubmit={handleSubmit} noValidate>
@@ -67,7 +92,6 @@ const StudentForm = () => {
             value={formData.rollNumber}
             onChange={handleChange}
           />
-         
           <TextField
             margin="normal"
             required
@@ -78,25 +102,25 @@ const StudentForm = () => {
             onChange={handleChange}
           />
           <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Student Phone"
-          name="studentPhone"
-          value={formData.studentPhone}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          color='secondary'
-          required
-          fullWidth
-          label="Student Email"
-          name="studentEmail"
-          type="email"
-          value={formData.studentEmail}
-          onChange={handleChange}
-        />
+            margin="normal"
+            required
+            fullWidth
+            label="Student Phone"
+            name="studentPhone"
+            value={formData.studentPhone}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            color="secondary"
+            required
+            fullWidth
+            label="Student Email"
+            name="studentEmail"
+            type="email"
+            value={formData.studentEmail}
+            onChange={handleChange}
+          />
           <TextField
             margin="normal"
             required
@@ -133,9 +157,9 @@ const StudentForm = () => {
             value={formData.studentPassword}
             onChange={handleChange}
           />
-           <TextField
-           multiline
-           rows={4}
+          <TextField
+            multiline
+            rows={4}
             margin="normal"
             required
             fullWidth
@@ -144,7 +168,7 @@ const StudentForm = () => {
             value={formData.studentAddress}
             onChange={handleChange}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 ,background:"brown",height:'45px'}}>
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, background: 'brown', height: '45px' }}>
             Submit
           </Button>
         </form>

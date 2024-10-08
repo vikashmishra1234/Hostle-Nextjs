@@ -1,12 +1,8 @@
 "use client"
-import { useTheme } from "@mui/material";
 import { ParallaxBanner, ParallaxProvider } from "react-scroll-parallax";
 import { TypeAnimation } from "react-type-animation";
 
 export default function Land() {
-  const theme = useTheme()
-  const sm = theme.breakpoints.down('sm');
-  const md = theme.breakpoints.down('md');
   return (
     <ParallaxProvider>
       <div className="h-[60vh] md:h-[calc(100vh - 100px)]" style={{  backgroundColor: "#f0f0f0" }}>

@@ -3,7 +3,6 @@ import "./globals.css";
 
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./Navbar";
-import CollegeFooter from "./Footer";
 
 export const metadata: Metadata = {
   title: "BSA Hostel",
@@ -20,9 +19,9 @@ export default function RootLayout({
    
       <body>
         <Navbar/>
-        <>
+        <AuthProvider>
         {children}
-        </>
+        </AuthProvider>
         </body>
     </html>
   );

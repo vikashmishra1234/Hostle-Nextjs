@@ -1,15 +1,14 @@
 "use client"
-
 import { Box, Button, Container, TextField, Typography } from '@mui/material'
-import { signIn } from 'next-auth/react'
+import { signIn,getSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Swal from 'sweetalert2'
 
 const HostlerLogin = () => {
     const router = useRouter();
   const [rollNumber, setrollNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,17 +16,24 @@ const HostlerLogin = () => {
       redirect: false, 
       rollNumber,         
       password,
-      role,
-      callbackUrl: '/hostler/dashboard',       
+      role:'student',      
     });
 
     if (res?.error) {
-      // Handle errors here (e.g., invalid credentials)
-      console.error('HostlerLogin failed:', res.error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text: 'Login Failed!',
+      });
     } else {
-      alert("login successfully")
-      router.push('/hostler/dashboard')
-      console.log('HostlerLogin successful',res);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Login successful!',
+      }).then(async () => {
+        await router.push('/hostler/dashboard'); // Navigate to dashboard after Swal confirmation
+        console.log('Navigated to dashboard');
+      });
     }
   };
 

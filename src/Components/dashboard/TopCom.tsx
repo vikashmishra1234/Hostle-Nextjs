@@ -1,5 +1,5 @@
 "use client"
-import { Container, Typography,Box, Paper } from '@mui/material'
+import {Typography,Box, Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { fetchStudents } from '@/app/utils'

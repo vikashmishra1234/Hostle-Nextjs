@@ -26,6 +26,9 @@ async function connectToDatabase() {
           clearInterval(checkConnection);
           resolve({ client: cachedClient, db: cachedClient.connection });
         }
+        else{
+          console.log(reject)
+        }
       }, 100);
     });
   }

@@ -2,7 +2,7 @@ import connectToDatabase from "@/lib/dbConnect";
 import Student from "@/models/Student";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import bcrypt, { genSalt } from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 
 export async function POST(request: NextRequest) {
   try {

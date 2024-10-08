@@ -3,11 +3,8 @@ import Feedbackchart from '@/Components/dashboard/FeedbackChart';
 import FeedbackStudent from '@/Components/dashboard/FeedbackStudent';
 import StudentTable from '@/Components/dashboard/Table';
 import TomCom from '@/Components/dashboard/TopCom';
-import connectToDatabase from '@/lib/dbConnect';
-import Complaint from '@/models/Complaint';
-import { Box, Container, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import React from 'react';
-import { subDays, startOfDay, endOfDay } from 'date-fns';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { getAllStudentComplaints, getFeedback } from '@/app/utils';
@@ -21,8 +18,8 @@ const page = async () => {
     </div>
   }
 
-  let complaints = await getAllStudentComplaints();
-  let feedbacks = await getFeedback();
+  const complaints = await getAllStudentComplaints();
+  const feedbacks = await getFeedback();
  
 
   return (

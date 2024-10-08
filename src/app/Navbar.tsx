@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,11 +13,9 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-red-900 text-white">
-      <div className="pl-10 pr-10 sm:pr-0 md:pr-10 h-[100px] flex justify-between gap-8 items-center">
-        <Link href="/" className="text-[1.7rem] xm:text-[2rem] sm:text-2xl md:text-3xl font-bold">
-          BSA Hostel
-        </Link>
+    <nav className="bg-red-900 z-50 sticky top-0 text-white">
+      <div className="pl-5 pr-5 sm:pr-0 md:pr-10 h-[100px] flex justify-between gap-8 items-center">
+        <Image height={300} width={200} src={'https://www.bsacet.org/wp-content/uploads/2020/06/logo-e-1.png'} alt='logo'></Image>
 
         {/* Hamburger menu for mobile */}
         <div className="md:hidden  cursor-pointer" onClick={toggleMenu}>
@@ -24,16 +23,13 @@ export default function Navbar() {
         </div>
 
         {/* Desktop menu */}
-        <ul className="hidden md:flex flex-wrap  text-xl space-x-5">
+        <ul className="hidden md:flex flex-wrap m-auto  text-xl space-x-5">
           <li><Link href="/" className="">Home</Link></li>
           <li><Link href="/about" className="">About</Link></li>
-          <li><Link href="/administration" className="">Administration</Link></li>
-          <li><Link href="/admissions" className="">Admissions</Link></li>
-          <li><Link href="/faculties" className="">Faculties</Link></li>
-          <li><Link href="/gallery" className="">Gallery</Link></li>
-          <li><Link href="/contact" className="">Contact us</Link></li>
           <li><Link href="/admin/dashboard" className="">Admin</Link></li>
           <li><Link href="/hostler/dashboard" className="">Hostler</Link></li>
+          <li><Link href="/gallery" className="">Gallery</Link></li>
+          <li><Link href="/contact" className="">Contact us</Link></li>
         </ul>
 
         {/* Mobile menu */}

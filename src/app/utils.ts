@@ -80,7 +80,7 @@ export const getStudentComplaint = async(rollNumber:any):Promise<any>=>{
       if(studentComplaint&&studentComplaint.length==0){
           return false;
       }
-     let complaints = studentComplaint.map((comp: any) => ({
+     const complaints = studentComplaint.map((comp: any) => ({
         ...comp.toObject(),
         _id: comp._id.toString(),
       }));
@@ -107,7 +107,7 @@ export const getAllStudentComplaints = async()=>{
     if(getData&& (getData.length==0)){
       return false
     }
-   let complaints = getData.map((comp: any) => ({
+   const complaints = getData.map((comp: any) => ({
       ...comp.toObject(),
       _id: comp._id.toString(),
     }));
@@ -132,7 +132,7 @@ export const getFeedback = async()=>{
     if(feedbacks&& (feedbacks.length==0)){
       return false
     }
-   let data = feedbacks.map((comp: any) => ({
+   const data = feedbacks.map((comp: any) => ({
       ...comp.toObject(),
       _id: comp._id.toString(),
     }));
