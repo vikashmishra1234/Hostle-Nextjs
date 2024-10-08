@@ -1,4 +1,4 @@
-'use client';
+'use client'; // Ensure this file is treated as a client component
 
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { signIn } from 'next-auth/react';
@@ -6,16 +6,17 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 
-const Login = () => {
+const AdminLogin = () => {
   const router = useRouter();
   const [adminId, setAdminId] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const res = await signIn('credentials', {
       redirect: false,
-      adminId,
+      adminId, 
       password,
       role: 'admin',
     });
@@ -31,9 +32,8 @@ const Login = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Login successful!',
-      }).then(async () => {
-        await router.push('/admin/dashboard'); // Navigate to dashboard after Swal confirmation
-        console.log('Navigated to dashboard');
+      }).then(() => {
+        router.push('/admin/dashboard'); // Ensure this line runs after Swal is closed
       });
     }
   };
@@ -77,4 +77,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

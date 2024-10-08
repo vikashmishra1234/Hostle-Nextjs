@@ -10,11 +10,11 @@ const Complaints:React.FC<any> = ({complaints}) => {
   const md = theme.breakpoints.down('sm')
 
   return (
-    <Box >
+    <Box  >
       <Typography sx={{margin:"30px 0px"}} variant='h4'>Complaints</Typography>
        {
         complaints.map((com:any,ind:number)=>(
-            <>
+            <React.Fragment key={ind}>
             <Paper key={com._id} sx={{display:'flex',[md]:{flexDirection:"column"},justifyContent:'space-around',gap:"15px",alignItems:'center',marginBottom:"10px",padding:'10px 0px 10px 30px'}} elevation={2}>
             <Typography sx={{fontSize:"1.2rem",[md]:{display:"none",fontSize:'1.5rem'}}} component='strong'>{ind+1}.</Typography>
             <Typography sx={{fontSize:"1.2rem",textTransform:"capitalize"}} >Title: {com.complaintTitle}</Typography>
@@ -37,7 +37,7 @@ const Complaints:React.FC<any> = ({complaints}) => {
               />
         </Box>
            }
-            </>
+            </React.Fragment>
         ))
        }
     </Box>
