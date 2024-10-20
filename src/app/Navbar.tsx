@@ -36,14 +36,10 @@ export default function Navbar() {
         {isOpen && (
           <ul className="absolute top-[100px] left-0  z-20 w-full bg-red-900 text-white flex flex-col items-center text-xl space-y-4 md:hidden">
             <li><Link href="/" className="" onClick={toggleMenu}>Home</Link></li>
-            <li><Link href="/about" className="" onClick={toggleMenu}>About</Link></li>
-            <li><Link href="/administration" className="" onClick={toggleMenu}>Administration</Link></li>
-            <li><Link href="/admissions" className="" onClick={toggleMenu}>Admissions</Link></li>
-            <li><Link href="/faculties" className="" onClick={toggleMenu}>Faculties</Link></li>
             <li><Link href="/gallery" className="" onClick={toggleMenu}>Gallery</Link></li>
             <li><Link href="/contact" className="" onClick={toggleMenu}>Contact us</Link></li>
-            <li><Link href="/admin/dashboard" className="" onClick={toggleMenu}>Admin</Link></li>
-            <li><Link href="/hostler/dashboard" className="" onClick={toggleMenu}>Hostler</Link></li>
+            <li><Link href="/login" className="">Admin</Link></li>
+            <li><Link href="/hostler/login" className="">Hostler</Link></li>
           </ul>
         )}
       </div>
