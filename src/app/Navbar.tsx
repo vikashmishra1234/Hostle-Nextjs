@@ -26,8 +26,8 @@ export default function Navbar() {
         <ul className="hidden md:flex flex-wrap m-auto  text-xl space-x-5">
           <li><Link href="/" className="">Home</Link></li>
           <li><Link href="/about" className="">About</Link></li>
-          <li><Link href="/admin/dashboard" className="">Admin</Link></li>
-          <li><Link href="/hostler/dashboard" className="">Hostler</Link></li>
+          <li><Link href="/login" className="">Admin</Link></li>
+          <li><Link href="/hostler/login" className="">Hostler</Link></li>
           <li><Link href="/gallery" className="">Gallery</Link></li>
           <li><Link href="/contact" className="">Contact us</Link></li>
         </ul>
