@@ -47,6 +47,7 @@ export const RegisterComplaint = async(data:any):Promise<boolean>=>{
       }
       const isSent = await sendEmail(data.complaintTitle,data.complaintDescription,data.imageUrl)
       if(!isSent){
+        console.log("email is not sent")
         return false
       }
       const newComplaint = new Complaint(data);
