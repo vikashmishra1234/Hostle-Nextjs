@@ -11,7 +11,10 @@ const Complaints:React.FC<any> = ({complaints}) => {
 
   return (
     <Box  >
-      <Typography sx={{margin:"30px 0px"}} variant='h4'>Complaints</Typography>
+      <Typography sx={{margin:"90px 0px",[md]:{
+        fontSize:'25px',
+        margin:'60px 0px'
+      }}} variant='h4'>Your Recent Complaints</Typography>
        {
         complaints.map((com:any,ind:number)=>(
             <React.Fragment key={ind}>
@@ -31,7 +34,7 @@ const Complaints:React.FC<any> = ({complaints}) => {
               <CardMedia
                 component="img"
                 height="80"
-                sx={{height:"150px",width:"100%"}}
+                sx={{height:"150px",width:"100%",objectFit:'contain'}}
                 image={com.imageUrl.slice(5,)}
                 alt="complaint image"
               />

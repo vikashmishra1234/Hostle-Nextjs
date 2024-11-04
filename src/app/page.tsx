@@ -1,14 +1,13 @@
 // src/pages/Home.tsx
 
-import About from '@/Components/about/About';
 import ImageCarousel from '@/Components/clientComponents/ImageCarousel';
-import HomeCard from '@/Components/HomeCard';
 import HomeForm from '@/Components/HomeForm';
 
 import Land from '@/Land';
 import { Box, Container } from '@mui/material';
 import React from 'react';
 import CollegeFooter from './Footer';
+import AboutHostelPage from './about/About';
 
 // Define the type for latestNews
 type LatestNews = string[];
@@ -30,14 +29,15 @@ const Home: React.FC = () => {
   return (
     <Box component='div'>
       <Land />
-      <About latestNews={latestNews} />
-      <Container maxWidth={false} sx={{display:'flex',justifyContent:'space-around',flexWrap:'wrap',maxWidth:'1400px'}}>
+      <AboutHostelPage/>
+      {/* <About latestNews={latestNews} /> */}
+      {/* <Container maxWidth={false} sx={{display:'flex',justifyContent:'space-around',flexWrap:'wrap',maxWidth:'1400px'}}>
         {
           Images.map((image:any,ind:any)=>(
             <HomeCard key={ind} description={image.description} title={image.title} imageUrl={image.url}/>
           ))
         }
-      </Container>
+      </Container> */}
         <Container maxWidth={false} sx={{maxWidth:'1300px'}}>
         <h3 className='text-[1.8rem] md:text-[2.5rem] font-bold text-[brown]'>Inside the Hostle</h3>
       <ImageCarousel/>

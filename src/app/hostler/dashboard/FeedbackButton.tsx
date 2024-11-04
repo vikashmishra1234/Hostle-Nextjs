@@ -4,20 +4,25 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } fro
 import React, { useState } from 'react'
 import {motion} from 'framer-motion'
 import Swal from 'sweetalert2'
+import Loader from '@/app/MyLoading';
 
 const FeedbackButton:React.FC<any> = ({user}) => {
     const [selectedValue, setSelectedValue] = useState<any>(null);
     const [description,setDescription] = useState<any>('')
     const [show,setShow] = useState<any>(false);
+    const [loading,setLoading] = useState(false);
   
 
     const handleChange = (event:any) => {
       setSelectedValue(event.target.value);
     };
     const handleSubmit = async()=>{
-      alert(selectedValue)
       if(!selectedValue){
-        alert("please choose the desired value")
+        Swal.fire({
+          icon:'success',
+          title:'error !',
+          text:'Please choose the value'
+        })
       }
         const data = {
             qaulity:selectedValue,
@@ -26,36 +31,44 @@ const FeedbackButton:React.FC<any> = ({user}) => {
             studentName:user.studentName,
             description:description
         }
-       
+       setLoading(true);
        const res = await addFeedback(data);
+       setLoading(false);
        if(res){
-        alert("feedback added succesfully")
+        Swal.fire({
+          icon:'success',
+          title:"Thank You !",
+          text:'your feedback has been sent successfully'
+        })
        }
        else{
         Swal.fire({
           icon:'error',
-          title:"Opps !",
-          text:"Something went"
+          title:"error !",
+          text:'Something is wrong !'
         })
        }
+    }
+    if(loading){
+      return <Loader loading = {loading}/>
     }
   return (
     <Box>
       <motion.div
-  initial={{ y: "30%", opacity: 0 }}
-  whileInView={{ y: 0, opacity: 1 }}
-  transition={{ duration: 0.3, ease: "easeOut" }}
-  className="text-[1.9rem] text-[brown]"
+  initial={{ y: "50%" }}
+  whileInView={{ y: 0}}
+  transition={{ duration: 0.7, ease: "easeOut" }}
+  className="text-xl sm:text-2xl py-4 rounded-lg cursor-pointer text-white text-center bg-[#cb3a3a]"
   onClick={() => setShow(!show)}
 >
   Give Feedback on Today&apos; Meal
 </motion.div>
 
-        <motion.div initial={{ width: "0%", opacity: 0,margin:'auto' }}
+        {/* <motion.div initial={{ width: "0%", opacity: 0,margin:'auto' }}
           whileInView={{ width: "100%", opacity: 1 }}
           transition={{ duration: .7, ease: "easeInOut",delay:.3 }}
            style={{height:"3px",width:'100%',background:'brown'}}
-          />
+          /> */}
 
        {show && <Box  sx={{marginTop:'30px'}}>
         <FormControl fullWidth variant="outlined">

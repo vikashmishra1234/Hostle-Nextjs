@@ -3,6 +3,7 @@ import connectToDatabase from "@/lib/dbConnect";
 import Complaint from "@/models/Complaint";
 import Feedback from "@/models/Feedback";
 import Student from "@/models/Student";
+import Attendence from "@/models/Attendence";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import { sendEmail } from "./utils/Nodemailer";
 
@@ -143,3 +144,93 @@ export const getFeedback = async()=>{
     return false
   }
 }
+
+export const MarkAttendece = async(rollNumber:string,studentName:string|undefined,studentYear:string|undefined)=>{
+  try {
+    if (!rollNumber) {
+      return {
+        message: 'Roll Number is undefined',
+        success: false,
+      };
+    }
+
+    await connectToDatabase();
+
+    // Get the start and end of the current day to query attendance for today
+    const start = startOfDay(new Date());
+    const end = endOfDay(new Date());
+
+    // Check if attendance is already marked for today
+    const existingAttendance = await Attendence.findOne({
+      rollNumber,
+      createdAt: { $gte: start, $lte: end }, // Query for today's attendance
+    });
+
+    if (existingAttendance) {
+      return {
+        message: 'Attendance already marked for today',
+        success: false,
+      };
+    }
+
+    // Create new attendance entry
+    const newAttendance = await Attendence.create({
+      rollNumber,
+      studentName,
+      studentYear,
+      isPresent: true,
+    });
+
+    console.log(newAttendance);
+    console.log('Attendance marked');
+
+    return {
+      success: true,
+      message: 'Attendance marked successfully',
+    };
+  } catch (error: any) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Something went wrong',
+    };
+  }
+}
+
+
+export const fetchTodaysAttendance = async () => {
+  try {
+  
+
+    await connectToDatabase(); // Ensure the database connection is established
+
+    const start = startOfDay(new Date());
+    const end = endOfDay(new Date());
+
+    // Query to find attendance for the provided roll number today
+    const todaysAttendance = await Attendence.find({
+      createdAt: { $gte: start, $lte: end }, // Attendance between start and end of today
+    });
+
+    if (todaysAttendance.length === 0) {
+      return {
+        success: true,
+        message: "No attendance marked for today.",
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Attendance fetched successfully.",
+      data: todaysAttendance,
+    };
+  } catch (error: any) {
+    console.error("Error fetching today's attendance:", error);
+    return {
+      success: false,
+      message: "Something went wrong while fetching attendance.",
+      data: null,
+    };
+  }
+};

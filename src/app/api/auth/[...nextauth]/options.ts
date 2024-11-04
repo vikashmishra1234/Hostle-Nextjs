@@ -90,7 +90,8 @@ export const authOptions: NextAuthOptions = {
     //     signIn:'/admin'
     // },
     session:{
-        strategy:'jwt'
+        strategy:'jwt',
+        maxAge: 600,
     },
     secret:"vikash mishra"
 }

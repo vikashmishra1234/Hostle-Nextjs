@@ -26,7 +26,7 @@ const page = async () => {
     <>
      {
       user&&user.role=='admin'&&<>
-      <Container>
+      <Container maxWidth={false} sx={{maxWidth:"1300px"}}>
       <Typography sx={{ color: 'brown',fontWeight: 'bold',
   textShadow: '0px 1px 4px',
   margin: '50px 0px', }} variant="h3">

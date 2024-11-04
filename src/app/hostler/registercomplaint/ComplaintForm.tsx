@@ -2,6 +2,7 @@
 import Loader from '@/app/MyLoading';
 import { RegisterComplaint } from '@/app/utils';
 import axios from 'axios';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation'; // useSearchParams for app directory
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
@@ -141,6 +142,10 @@ const ComplaintForm = () => {
 
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
         Submit Complaint
+      </button>
+       
+      <button type="button" className="bg-white border border-black ml-4 text-gray-600 px-4 py-2 rounded-md">
+        <Link href='/hostler/dashboard'>Back Dashboard</Link>
       </button>
     </form>
   );

@@ -9,10 +9,17 @@ import Link from "next/link";
 import FeedbackButton from "./FeedbackButton";
 import { getStudentComplaint } from "@/app/utils";
 import Complaints from "./Complaints";
+import Attendence from "./Attendence";
 
+type User = {
+  role?:string|undefined
+    rollNumber?:string|undefined;
+    studentYear:string|undefined
+    studentName:string|undefined
+}
 const page = async () => {
   const session = await getServerSession(authOptions);
-  const user = session?.user;
+  const user = session?.user as User;
   const studentName = session?.user?.studentName || "Guest";
   const studentComplaints = await getStudentComplaint(user?.rollNumber);
 
@@ -40,6 +47,7 @@ const page = async () => {
           </Link>
         </div>
         <FeedbackButton user={user} />
+        <Attendence user={user}/>
         <Box>
           {studentComplaints ? (
             <Box>
