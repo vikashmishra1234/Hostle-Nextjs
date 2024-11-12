@@ -11,7 +11,6 @@ const Table:React.FC = () => {
     const getData = async()=>{
        try {
         const fetch:any = await fetchStudents();
-        console.log("this is fetch",fetch)
         setStudentData(fetch)
        } catch (error:any) {
         console.log(error)
@@ -50,7 +49,7 @@ const Table:React.FC = () => {
       </thead>
       <tbody>
         {studentData.map((student:any )=> (
-          <tr className='text-[1.1rem]' key={student.id}>
+          <tr className='text-[1.1rem]' key={student._id}>
             <td style={{ border: '1px solid black', padding: '8px' }}>{student.rollNumber}</td>
             <td style={{ border: '1px solid black', padding: '8px' }}>{student.studentName}</td>
             <td style={{ border: '1px solid black', padding: '8px' }}>{student.studentFatherName}</td>

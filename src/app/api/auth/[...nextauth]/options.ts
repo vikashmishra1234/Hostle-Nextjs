@@ -91,7 +91,7 @@ export const authOptions: NextAuthOptions = {
     // },
     session:{
         strategy:'jwt',
-        maxAge: 600,
+        maxAge: 900,
     },
     secret:"vikash mishra"
 }

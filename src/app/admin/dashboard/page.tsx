@@ -8,6 +8,7 @@ import React from 'react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { getAllStudentComplaints, getFeedback } from '@/app/utils';
+import ChatBot from '@/Components/Chatbot/ChatBot';
 
 const page = async () => {
   const session = await getServerSession(authOptions);
@@ -26,6 +27,7 @@ const page = async () => {
     <>
      {
       user&&user.role=='admin'&&<>
+      <ChatBot></ChatBot>
       <Container maxWidth={false} sx={{maxWidth:"1300px"}}>
       <Typography sx={{ color: 'brown',fontWeight: 'bold',
   textShadow: '0px 1px 4px',

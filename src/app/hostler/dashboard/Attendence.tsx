@@ -27,9 +27,9 @@ const Attendence: React.FC<AttendenceProps> = ({ user }) => {
     setLoading("ip");
     try {
       const response = await fetch("https://api.ipify.org?format=json");
-      // const { ip } = await response.json();
-      const ip = '103.175.77.130'
-      setIsHostler(ip !== "103.175.77.130"); // Adjust logic if needed
+      const { ip } = await response.json();
+      alert(ip)
+      setIsHostler(ip !== "152.59.120.217");
       setShowModal(true);
     } catch (error) {
       console.error("Unable to fetch IP", error);
