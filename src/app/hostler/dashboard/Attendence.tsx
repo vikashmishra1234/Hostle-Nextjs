@@ -26,11 +26,28 @@ const Attendence: React.FC<AttendenceProps> = ({ user }) => {
   const fetchIpAddress = useCallback(async () => {
     setLoading("ip");
     try {
-      const response = await fetch("https://api.ipify.org?format=json");
-      const { ip } = await response.json();
-      alert(ip)
-      setIsHostler(ip !== "152.59.120.217");
-      setShowModal(true);
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            latitude = Math.floor(latitude)
+            longitude = Math.floor(longitude)
+            alert(latitude+" "+longitude)
+            if((latitude==27||28||26)&&(longitude==76||77||78)){
+              alert("helo")
+              setIsHostler(false);
+              setShowModal(true);
+            }
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+     
     } catch (error) {
       console.error("Unable to fetch IP", error);
       Swal.fire({
