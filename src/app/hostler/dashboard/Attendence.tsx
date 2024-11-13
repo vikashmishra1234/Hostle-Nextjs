@@ -31,10 +31,10 @@ const Attendence: React.FC<AttendenceProps> = ({ user }) => {
           (position) => {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
+            alert(latitude+" "+longitude)
             latitude = Math.floor(latitude)
             longitude = Math.floor(longitude)
-            alert(latitude+" "+longitude)
-            if((latitude==27||28||26)&&(longitude==76||77||78)){
+            if((latitude==27||28||26)&&(longitude==76||77)){
               alert("helo")
               setIsHostler(false);
               setShowModal(true);
