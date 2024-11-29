@@ -41,6 +41,7 @@ export const addFeedback = async(data:any):Promise<boolean>=>{
 }
 export const RegisterComplaint = async(data:any):Promise<boolean>=>{
     try {
+     
       await connectToDatabase();
       if(!data.studentId){
         console.log("studentId not found");

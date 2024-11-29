@@ -10,7 +10,7 @@ const HomeForm = ()=> {
 
   return (
     <Box sx={{paddingTop:"40px",paddingBottom:'40px'}}>
-      <Typography variant='h3' sx={{fontWeight:'bold',fontSize:'2.5rem',color:'brown',[small]:{
+      <Typography variant='h3' sx={{fontWeight:'bold',fontSize:'2.2rem',color:'brown',[small]:{
         fontSize:'1.6rem',
         color:'brown'
       },margin:"30px 0px"}}>Leave us a note and we will get back to you</Typography>

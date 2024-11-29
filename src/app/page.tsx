@@ -38,8 +38,8 @@ const Home: React.FC = () => {
           ))
         }
       </Container> */}
-        <Container maxWidth={false} sx={{maxWidth:'1300px'}}>
-        <h3 className='text-[1.8rem] md:text-[2.5rem] font-bold text-[brown]'>Inside the Hostle</h3>
+        <Container maxWidth={false} sx={{maxWidth:'1300px',marginTop:'20px'}}>
+        <h3 className='text-[1.6rem] md:text-[2.2rem] font-bold text-[brown]'>Inside the Hostle</h3>
       <ImageCarousel/>
       <HomeForm/>
         </Container>

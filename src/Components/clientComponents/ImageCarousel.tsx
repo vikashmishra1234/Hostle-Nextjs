@@ -8,15 +8,12 @@ import { Box, CardMedia } from '@mui/material';
 const ImageCarousel = () => {
   const images = [
     'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
-    'https://www.bsacet.org/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-28-at-12.23.51-PM-6.jpeg',
+    'https://www.bsacet.org/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-11.57.27.jpeg',
+    'https://www.bsacet.org/wp-content/uploads/2024/01/IMG_1807-scaled.jpg',
+    'https://www.bsacet.org/wp-content/uploads/2024/01/IMG_1830-scaled.jpg',
+    'https://www.bsacet.org/wp-content/uploads/2024/01/IMG_1849-scaled.jpg',
+    'https://www.bsacet.org/wp-content/uploads/2024/01/IMG_1913-scaled.jpg',
+    'https://www.bsacet.org/wp-content/uploads/2023/11/CSE1-scaled.jpg',
   ];
 
   const responsive = {

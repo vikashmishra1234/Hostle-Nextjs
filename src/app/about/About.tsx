@@ -1,6 +1,5 @@
 import React from 'react';
 import { Bed, Utensils, Wifi, Users, Book, Dumbbell } from "lucide-react";
-import hostelImage from '@/assets/10.jpg.jpeg'
 import img1 from '@/assets/7.jpg.jpeg'
 import img2 from '@/assets/7.jpg.jpeg'
 import table from '@/assets/13.jpg.jpeg'
@@ -41,11 +40,7 @@ export default function AboutHostelPage() {
       <main className="container mx-auto px-6 py-12">
         <section className="mb-16">
           <Card className="overflow-hidden">
-            <Image
-              src={hostelImage}
-              alt="BSA College Hostel"
-              className="w-full h-72 object-cover"
-            />
+          
             <CardContent className="p-3 md:p-8">
               <h2 className="text-2xl md:text-4xl font-semibold mt-10 mb-6">Welcome to BSA College Hostel</h2>
               <p className="text-md md:text-xl text-gray-700 mb-6">
@@ -137,20 +132,7 @@ export default function AboutHostelPage() {
           </Card>
         </section>
 
-        <section>
-          <Card>
-            <CardHeader>
-              <CardTitle>Hostel Life at BSA</CardTitle>
-              <CardDescription>Experience the best of student living</CardDescription>
-            </CardHeader>
-            <CardContent className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <Image src={table} alt="Students in common room" height={80} width={210}  className="rounded-lg" />
-              <Image src={img1} alt="Students in common room" height={80} width={210}  className="rounded-lg" />
-              <Image src={img2} alt="Students in common room" height={80} width={210}  className="rounded-lg" />
-            
-            </CardContent>
-          </Card>
-        </section>
+       
       </main>
     </div>
   );

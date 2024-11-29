@@ -6,32 +6,23 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation'; // useSearchParams for app directory
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { useSession } from 'next-auth/react';
 
 const ComplaintForm = () => {
-  const searchParams = useSearchParams();
+  
   const [user, setUser] = useState<any>(null);
   const [loading,setLoading] = useState<any>(false)
   const [fileName,setFileName] = useState<any>('')
   const router = useRouter()
+  const { data: session } = useSession(); 
+ 
 
-  useEffect(() => {
-    const userParam = searchParams.get('user');
-    if (userParam) {
-      try {
-       
-        setUser(JSON.parse(userParam)); // Parse user if available
-      } catch (error) {
-        console.error('Failed to parse user:', error);
-
-      }
-    }
-  
-  }, []);
   useEffect(()=>{
+    setUser(session?.user)
     if(user&&user.studentId==''){
         router.push('/hostler/dashboard')
     }
-  },[user])
+  },[session])
 
   const [formData, setFormData] = useState({
     studentId: '',
@@ -70,8 +61,10 @@ const ComplaintForm = () => {
     formData.studentName = user.studentName;
     formData.studentId = user.rollNumber;
     formData.studentYear = user.studentYear
+    console.log(formData)
     setLoading(true)
     const res = await RegisterComplaint(formData);
+    // const res = false
     setLoading(false)
     if(res){
       Swal.fire({

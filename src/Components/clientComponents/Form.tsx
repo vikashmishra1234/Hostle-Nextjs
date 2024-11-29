@@ -1,132 +1,186 @@
 'use client';
 
-import { TextField, Button, Box, useTheme } from '@mui/material';
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { TextField, Button, Box, Typography, Snackbar, IconButton, InputAdornment } from '@mui/material';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeProvider } from '@mui/material/styles';
 import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import MessageIcon from '@mui/icons-material/Message';
+import theme from './theme';
 
-const Form = () => {
-  const [name, setName] = useState<string>(''); // Use string for name
-  const [email, setEmail] = useState<string>(''); // Use string for email
-  const [message, setMessage] = useState<string>(''); // Use string for message
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
 
-  const theme = useTheme();
-  const small = theme.breakpoints.down('sm');
+const ContactForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Correctly type the event as React.FormEvent<HTMLFormElement>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: '' }));
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Partial<FormData> = {};
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+    if (!formData.message.trim()) newErrors.message = 'Message is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(message);
-    console.log(name);
-    console.log(email);
+    if (validateForm()) {
+      console.log(formData);
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setIsSubmitted(false);
   };
 
   return (
-    <Box component={'form'} onSubmit={handleSubmit}>
-      <TextField
-        label="Enter your name"
-        value={name}
-        // Correctly type the event as React.ChangeEvent<HTMLInputElement>
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-        fullWidth
-        variant="filled"
-        required
-        type="text"
+    <ThemeProvider theme={theme}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
         sx={{
-          marginBottom: '30px',
-          [small]: {
-            marginBottom: '20px'
-          }
+          maxWidth: '1000px',
+          margin: 'auto',
+          padding: '2rem',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         }}
-        inputProps={{
-          sx: { fontSize: '1rem', height: '50px', [small]: { height: '30px' }, border: "none" }
-        }}
-      />
-      <TextField
-        label="Enter your email"
-        value={email}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-        fullWidth
-        variant="filled"
-        required
-        type="email"
-        sx={{
-          marginBottom: '30px',
-          [small]: {
-            marginBottom: '20px'
-          }
-        }}
-        inputProps={{
-          disableUnderline: true,
-          sx: { fontSize: '1rem', height: '50px', [small]: { height: '30px' }, border: "none" }
-        }}
-      />
-      <TextField
-        label="Enter your message"
-        multiline
-        rows={4}
-        value={message}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
-        fullWidth
-        variant="filled"
-        required
-        type="text"
-        sx={{
-          marginBottom: '30px',
-          [small]: {
-            marginBottom: '20px'
-          }
-        }}
-        inputProps={{
-          disableUnderline: true,
-          sx: { fontSize: '1rem', height: '50px', [small]: { height: 'unset' }, border: "none" }
-        }}
-      />
-
-      <motion.div
-        initial={{
-          opacity: 1,
-          width: 'fit-content'
-        }}
-        whileHover={{
-          opacity: .6
-        }}
-        whileTap={{
-          scale: .7
-        }}
-        transition={{ ease: 'easeInOut' }}
       >
-        <Button
-          variant="contained"
-          color="inherit"
-          type='submit'
-          sx={{
-            height: '54px',
-            borderRadius: '6px',
-            width: '200px',
-            fontWeight: 'bold',
-            fontSize: '1.2rem',
-            textTransform: 'none',
-            backgroundColor: 'brown',
-            color: 'white',
-            [small]: {
-              height: '44px',
-              width: '130px',
-              fontSize: '1.1rem'
-            }
+      
+        <TextField
+          label="Name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          fullWidth
+          variant="filled"
+          required
+          error={!!errors.name}
+          helperText={errors.name}
+          margin="normal"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <PersonIcon color="primary" />
+              </InputAdornment>
+            ),
           }}
-        >
-          Send <SendIcon sx={{
-            marginLeft: '10px', height: '24px', [small]: {
-              height: '22px',
-              marginLeft: '5px'
-            }
-          }} />
-        </Button>
-      </motion.div>
-
-    </Box>
+        />
+        <TextField
+          label="Email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          fullWidth
+          variant="filled"
+          required
+          type="email"
+          error={!!errors.email}
+          helperText={errors.email}
+          margin="normal"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <EmailIcon color="primary" />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          label="Message"
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+          fullWidth
+          variant="filled"
+          required
+          multiline
+          rows={4}
+          error={!!errors.message}
+          helperText={errors.message}
+          margin="normal"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <MessageIcon color="primary" />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Box sx={{ display: 'flex', mt: 3 }}>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button
+              variant="contained"
+              
+              type="submit"
+              startIcon={<SendIcon />}
+              sx={{
+                background:'brown',
+                color:'white',
+                padding: '10px 30px',
+                fontSize: '1rem',
+              }}
+            >
+              Send Message
+            </Button>
+          </motion.div>
+        </Box>
+        <AnimatePresence>
+          {isSubmitted && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+            >
+              <Snackbar
+                open={isSubmitted}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message="Message sent successfully!"
+                action={
+                  <IconButton
+                    size="small"
+                    aria-label="close"
+                    color="inherit"
+                    onClick={handleCloseSnackbar}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                }
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Box>
+    </ThemeProvider>
   );
 };
 
-export default Form;
+export default ContactForm;
+
