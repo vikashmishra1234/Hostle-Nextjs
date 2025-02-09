@@ -1,90 +1,144 @@
-'use client';
+"use client"
 
-import { Box, Button, CardMedia, Paper, Typography } from '@mui/material';
-import axios from 'axios';
-import { motion } from 'framer-motion';
-import React, { useState } from 'react';
+import axios from "axios"
+import { motion, AnimatePresence } from "framer-motion"
+import type React from "react"
+import { useState, useCallback } from "react"
+import { ChevronDown, ChevronUp, CheckCircle, AlertTriangle } from "lucide-react"
 
 interface Complaint {
-  _id: string;
-  studentName: string;
-  studentYear: string;
-  status: string;
-  complaintTitle: string;
-  complaintDescription: string;
-  imageUrl: string;
+  _id: string
+  studentName: string
+  studentYear: string
+  status: string
+  complaintTitle: string
+  complaintDescription: string
+  imageUrl: string
 }
 
 interface ComplaintsProps {
-  complaints: Complaint[];
+  complaints: Complaint[]
 }
 
 const Complaints: React.FC<ComplaintsProps> = ({ complaints }) => {
-  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
-  const [toggle, setToggle] = useState<boolean>(false);
-  const [complaintStatus, setComplaintStatus] = useState<string>('');
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [updatedStatuses, setUpdatedStatuses] = useState<Record<string, string>>({})
 
-  const updateStatus = async (complaintId: string) => {
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id)
+  }
+
+  const updateStatus = useCallback(async (complaintId: string) => {
     try {
-      const res = await axios.put<{ success: boolean }>(`http://localhost:3000/api/updatecomplaint/?complaintId=${complaintId}`);
+      const res = await axios.put<{ success: boolean }>(
+        `/api/updatecomplaint/?complaintId=${complaintId}`,
+      )
       if (res.data.success) {
-        setComplaintStatus("solved");
+        setUpdatedStatuses((prev) => ({ ...prev, [complaintId]: "solved" }))
       }
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error("Error updating status:", error)
     }
-  };
+  }, [])
 
   return (
-    <Box>
-      <Typography component={'div'} sx={{ fontSize: "2.8rem", marginBottom: "50px" }}>Complaints
-        <motion.div initial={{ width: "0%", opacity: 0, margin: 'auto' }}
-          whileInView={{ width: "100%", opacity: 1 }}
+    <div className="p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-8 sm:mb-12"
+      >
+        <h1 className="text-xl sm:text-4xl font-bold text-gray-800">Complaints Dashboard</h1>
+        <motion.div
+          initial={{ width: "0%" }}
+          animate={{ width: "100%" }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
-          style={{ height: "3px", width: '100%', background: 'brown' }}
+          className="h-[2px] md:h-1 bg-[brown] mx-auto mt-2 max-w-md"
         />
-      </Typography>
+      </motion.div>
 
-      {
-        complaints.map((com, ind) => (
-          <React.Fragment key={com._id}>
-            <Paper
-              sx={{ display: 'flex', justifyContent: 'space-around', gap: "15px", alignItems: 'center', marginBottom: "15px", padding: '10px 0px 10px 30px' }}
-              elevation={2}
-            >
-              <Typography sx={{ fontSize: "1.3rem" }} component='strong'>{ind + 1}.</Typography>
-              <Typography sx={{ fontSize: "1.3rem" }}>
-                {com.studentName} {com.studentYear} year raised a complaint
-              </Typography>
-              <Typography sx={{ fontSize: "1.2rem", color: com.status === 'pending' ? "red" : "green" }}>
-                {complaintStatus ? complaintStatus : com.status}
-              </Typography>
-              <Button onClick={() => {
-                setClickedIndex(ind);
-                setToggle(!toggle);
-              }}>View Complaint</Button>
-              <Button sx={{ color: 'green' }} color="success" variant='outlined' onClick={() => updateStatus(com._id)}>Mark as done</Button>
-            </Paper>
+      <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto">
+        {complaints.map((complaint, index) => (
+          <motion.div
+            key={complaint._id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200"
+          >
+            <div className="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex-1">
+                <h2 className="text-lg sm:text-xl font-semibold capitalize text-gray-800">{complaint.complaintTitle}</h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  {complaint.studentName} ({complaint.studentYear} year)
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    updatedStatuses[complaint._id] || complaint.status === "solved"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-amber-100 text-amber-800"
+                  }`}
+                >
+                  {updatedStatuses[complaint._id] || complaint.status}
+                </span>
+                <button
+                  onClick={() => updateStatus(complaint._id)}
+                  className={`px-4 py-2 rounded-lg text-white transition-colors duration-200 flex items-center gap-2 w-full sm:w-auto justify-center ${
+                    updatedStatuses[complaint._id] === "solved" || complaint.status === "solved"
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-indigo-500 hover:bg-indigo-600"
+                  }`}
+                  disabled={updatedStatuses[complaint._id] === "solved" || complaint.status === "solved"}
+                >
+                  <CheckCircle size={18} />
+                  <span className="hidden sm:inline">Mark as Solved</span>
+                  <span className="sm:hidden">Solve</span>
+                </button>
+                <button
+                  onClick={() => toggleExpand(complaint._id)}
+                  className="p-2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                  aria-label={expandedId === complaint._id ? "Collapse details" : "Expand details"}
+                >
+                  {expandedId === complaint._id ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                </button>
+              </div>
+            </div>
+            <AnimatePresence>
+              {expandedId === complaint._id && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="border-t border-gray-200"
+                >
+                  <div className="p-4 sm:p-6">
+                    <p className="text-gray-700 mb-4">{complaint.complaintDescription}</p>
+                    {complaint.imageUrl ? (
+                      <img
+                        src={complaint.imageUrl.slice(5) || "/placeholder.svg"}
+                        alt="Complaint image"
+                        className="w-full max-w-2xl mx-auto rounded-lg shadow-md"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center bg-gray-100 rounded-lg p-4">
+                        <AlertTriangle className="text-amber-500 mr-2" />
+                        <span className="text-gray-600">No image available</span>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
-            {
-              toggle && clickedIndex === ind &&
-              <Box component={'form'} sx={{ width: '50%', margin: '20px auto' }}>
-                <Typography variant='h5' component={"h3"}>Title: {com.complaintTitle}</Typography>
-                <Typography sx={{ fontSize: "1.2rem", margin: "10px 0px" }}>Description: {com.complaintDescription}</Typography>
-                <CardMedia
-                  component="img"
-                  height="80"
-                  sx={{ height: "150px", width: "100%" }}
-                  image={com.imageUrl.slice(5)} // assuming the URL slice is necessary
-                  alt="complaint image"
-                />
-              </Box>
-            }
-          </React.Fragment>
-        ))
-      }
-    </Box>
-  );
-};
+export default Complaints
 
-export default Complaints;

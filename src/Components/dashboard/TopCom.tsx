@@ -1,112 +1,80 @@
-"use client";
-import { Typography, Box, Paper } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { fetchStudents } from "@/app/utils";
-import { List } from "lucide-react";
+import { List, Users, CreditCard, UserPlus } from "lucide-react";
+import { Student } from "@/types/types";
+import Link from "next/link";
 
-const style1 = {
-  width: "340px",
-  margin: "10px",
-  border: "1px solid lightgray",
-  borderRadius: "10px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flexDirection: "column",
-  cursor: "pointer",
-  "&:hover": {
-    background: "lightgray",
-  },
-};
-const TomCom = () => {
-  const router = useRouter();
-  const [studentData, setStudentData] = useState<any>();
-  const [feeNotSub, setFeeNot] = useState<any>([]);
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const fetch: any = await fetchStudents();
-        if (fetch) {
-          setStudentData(fetch);
-          const notSubmitedFees = fetch.filter(
-            (item: any) => item.feeStatus == false
-          );
-          setFeeNot(notSubmitedFees);
-        }
-      } catch (error: any) {
-        console.log(error);
-      }
-    };
-    getData();
-  }, []);
+const TomCom = async () => {
+  const studentData: Student[] | null = await fetchStudents();
+  const cards = [
+    {
+      title: "Total students",
+      value: studentData?.length || 0,
+      icon: Users,
+      path: "/admin/dashboard/addstudent",
+      color: "bg-blue-500",
+    },
+    {
+      title: "Not paid yet",
+      value:
+        studentData?.filter((item: Student) => item.feeStatus == false)
+          .length || 0,
+      icon: CreditCard,
+      path: "/admin/dashboard/addstudent",
+      color: "bg-red-500",
+    },
+    {
+      title: "Add New Student",
+      value: "",
+      icon: UserPlus,
+      path: "/",
+      color: "bg-green-500",
+    },
+    {
+      title: "Today's Attendance",
+      value: "",
+      icon: List,
+      path: "/admin/dashboard/addstudent",
+      color: "bg-purple-500",
+    },
+  ];
+
   return (
-    <Box>
-      <Paper
-        elevation={3}
-        sx={{
-          width: "100%",
-          height: "200px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box sx={style1}>
-          <Typography sx={{ fontSize: "2.3rem" }} component={"span"}>
-            {studentData && studentData.length}
-          </Typography>
-          <Typography
-            sx={{ color: "brown", fontSize: "1.6rem", fontWeight: "bold" }}
-            component={"span"}
-          >
-            Total students
-          </Typography>
-        </Box>
-        <Box sx={style1}>
-          <Typography sx={{ fontSize: "2.3rem" }} component={"span"}>
-            {feeNotSub && feeNotSub.length}
-          </Typography>
-          <Typography
-            sx={{ color: "brown", fontSize: "1.6rem", fontWeight: "bold" }}
-            component={"span"}
-          >
-            Not payed yet
-          </Typography>
-        </Box>
-        <Box
-          sx={style1}
-          onClick={() => {
-            router.push("/admin/dashboard/addstudent");
-          }}
-        >
-          <Typography sx={{ fontSize: "2.3rem" }} component={"span"}>
-            +
-          </Typography>
-          <Typography
-            sx={{ color: "brown", fontSize: "1.6rem", fontWeight: "bold" }}
-            component={"span"}
-          >
-            Add New Student
-          </Typography>
-        </Box>
-        <Box
-          sx={style1}
-          onClick={() => {
-            router.push("/admin/dashboard/attendence");
-          }}
-        >
-          <Typography sx={{ fontSize: "2.3rem" }} component={"span"}>
-          <List />
-          </Typography>
-          <Typography
-            sx={{ color: "brown", fontSize: "1.6rem", fontWeight: "bold" }}
-            component={"span"}
-          >
-            Todays Attendence
-          </Typography>
-        </Box>
-      </Paper>
-    </Box>
+    <div className="p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cards.map((card, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
+            >
+              <Link
+                href={card.path}
+                className="p-6 flex flex-col items-center justify-center"
+              >
+                <h2 className="text-2xl font-bold mb-2">
+                  {card.value ? (
+                    <div
+                      className={`p-4 rounded-full ${card.color} text-white mb-4`}
+                    >
+                      {card.value}
+                    </div>
+                  ) : (
+                    0 || (
+                      <div
+                        className={`p-4 rounded-full ${card.color} text-white mb-4`}
+                      >
+                        <card.icon size={24} />
+                      </div>
+                    )
+                  )}
+                </h2>
+                <p className="text-gray-600 text-center">{card.title}</p>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

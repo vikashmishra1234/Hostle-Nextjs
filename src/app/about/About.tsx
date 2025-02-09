@@ -1,10 +1,6 @@
 import React from 'react';
 import { Bed, Utensils, Wifi, Users, Book, Dumbbell } from "lucide-react";
-import img1 from '@/assets/7.jpg.jpeg'
-import img2 from '@/assets/7.jpg.jpeg'
-import table from '@/assets/13.jpg.jpeg'
-import Image from 'next/image';
-// Card component
+
 const Card = ({ className = "", ...props }) => (
   <div className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`} {...props} />
 );

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ParallaxBanner, ParallaxProvider } from "react-scroll-parallax"
+import run from "./Components/Chatbot/gemini"
 
 const images = [
   "https://www.bsacet.org/wp-content/uploads/2024/03/bsa-5.jpeg",
@@ -13,6 +14,9 @@ const images = [
 export default function EnhancedLanding() {
   const [currentImage, setCurrentImage] = useState(0)
   const [fade, setFade] = useState(false)
+  // useEffect(()=>{
+  //   run()
+  // },[])
 
   const nextImage = () => {
     setFade(true)

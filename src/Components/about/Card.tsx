@@ -1,31 +1,29 @@
-'use client'
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material';
+"use client";
+import * as React from "react";
 
 export default function AboutCard() {
-  const theme = useTheme();
-  const sm = theme.breakpoints.down('sm');
   return (
-    <Card sx={{ maxWidth: 545 }}>
-      <CardMedia
-        sx={{ height: 320 }}
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwJ8jqVxtT7OFRQcvHXOnJvmVL4BZe8VHCmw&s"
-        title="green iguana"
+    <div className="max-w-[545px] bg-white shadow-lg rounded-lg overflow-hidden">
+      {/* Image */}
+      <img
+        className="w-full h-[320px] object-cover"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwJ8jqVxtT7OFRQcvHXOnJvmVL4BZe8VHCmw&s"
+        alt="Hostel"
       />
-      <CardContent>
-        <Typography variant="body2" sx={{ color: 'text.secondary',fontSize:'1.3rem',[sm]:{fontSize:'1.2rem'} }}>
-        BSA College Hostel provides affordable, comfortable accommodation for students enrolled at our institution. We aim to create a secure home away from home where you can focus on your studies while experiencing an enriching communal living environment.
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button variant='outlined' sx={{textTransform:'none',fontSize:'1.2rem'}}>Read More</Button>
-      </CardActions>
-    </Card>
+
+      {/* Card Content */}
+      <div className="p-6">
+        <p className="text-gray-600 text-lg sm:text-base">
+          BSA College Hostel provides affordable, comfortable accommodation for students enrolled at our institution. We aim to create a secure home away from home where you can focus on your studies while experiencing an enriching communal living environment.
+        </p>
+      </div>
+
+      {/* Card Actions */}
+      <div className="p-6">
+        <button className="text-lg sm:text-base border border-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition">
+          Read More
+        </button>
+      </div>
+    </div>
   );
 }

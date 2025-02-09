@@ -5,10 +5,9 @@ export const sendEmail = async (subject:any, text:any,image:any) => {
     service: 'gmail', 
     auth: {
       user:"vikashmishra8371@gmail.com", 
-      pass: process.env.GMAIL_APP_PASS, 
+      pass: 'sqkq gioz ueqb wain', 
     },
   });
-  console.log(process.env.GMAIL_APP_PASS)
   const mailOptions = {
     from:"vikashmishra8371@gmail.com",
     to:"vikasmishra1369@gmail.com",

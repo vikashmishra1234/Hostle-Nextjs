@@ -2,16 +2,17 @@
 import connectToDatabase from "@/lib/dbConnect";
 import Complaint from "@/models/Complaint";
 import Feedback from "@/models/Feedback";
-import Student from "@/models/Student";
+import Students from "@/models/Student";
 import Attendence from "@/models/Attendence";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import { sendEmail } from "./utils/Nodemailer";
+import { Student } from "@/types/types";
 
 export const fetchStudents = async()=>{
   try {
     await connectToDatabase();
-    const getData = await Student.find({});
-    const studentData = getData.map((student: any) => ({
+    const getData = await Students.find({});
+    const studentData:Student[] = getData.map((student: any) => ({
       ...student.toObject(),
       _id: student._id.toString(),
     }));
@@ -99,7 +100,7 @@ export const getAllStudentComplaints = async()=>{
     await connectToDatabase();
 
     const today = new Date();
-    const yesterday = subDays(today, 1);
+    const yesterday = subDays(today, 7);
 
     const getData = await Complaint.find({
       createdAt: {
@@ -125,10 +126,11 @@ export const getFeedback = async()=>{
   try {
     await connectToDatabase();
     const today = new Date();
+    const yesterday = subDays(today,7)
 
     const feedbacks = await Feedback.find({
       createdAt: {
-        $gte: startOfDay(today),
+        $gte: startOfDay(yesterday),
         $lt: endOfDay(today), 
       },
     });

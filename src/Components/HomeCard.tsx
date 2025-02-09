@@ -1,44 +1,33 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
+import * as React from "react";
 
 interface ImageUrl {
-    imageUrl:string;
-    title:string;
-    description:string;
-}
-const HomeCard:React.FC<ImageUrl> = ({imageUrl,title,description}) => {
-  return (
-    <Card sx={{ maxWidth: 375 ,marginTop:'30px',marginBottom:'30px'}}>
-      <CardMedia
-        component="img"
-        alt="green iguana"
-        height="140"
-        image={imageUrl}
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" sx={{fontWeight:'bold', color: 'text.secondary'}} component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary',fontSize:"1.2rem" }}>
-         {
-            description.split(" ").map((word:string,ind:number)=>(
-               ind<23&&<>{word+" "}</>
-            ))
-         }
-         ...
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button variant='outlined' >know more</Button>
-      </CardActions>
-    </Card>
-  );
+  imageUrl: string;
+  title: string;
+  description: string;
 }
 
-export default HomeCard
+const HomeCard: React.FC<ImageUrl> = ({ imageUrl, title, description }) => {
+  return (
+    <div className="max-w-[375px] mt-8 mb-8 bg-white shadow-lg rounded-lg overflow-hidden">
+      {/* Card Image */}
+      <img className="w-full h-[140px] object-cover" src={imageUrl} alt="Card Image" />
+
+      {/* Card Content */}
+      <div className="p-6">
+        <h5 className="text-lg font-bold text-gray-700">{title}</h5>
+        <p className="text-gray-600 text-base">
+          {description.split(" ").slice(0, 23).join(" ")}...
+        </p>
+      </div>
+
+      {/* Card Actions */}
+      <div className="p-6">
+        <button className="border border-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition">
+          Know More
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default HomeCard;

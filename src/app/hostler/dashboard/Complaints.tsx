@@ -1,50 +1,45 @@
-"use client"
-import { Box, Button, CardMedia, Paper, Typography, useTheme } from '@mui/material'
-import React, { useState } from 'react'
+'use client';
 
+import React, { useState } from 'react';
 
-const Complaints:React.FC<any> = ({complaints}) => {
-  const [clickedIndex,seClickedIndex] = useState<number|null>(null)
-  const [toggle,setToggle] = useState<boolean>(false)
-  const theme = useTheme()
-  const md = theme.breakpoints.down('sm')
+const Complaints:React.FC<any> = ({ complaints }) => {
+  const [clickedIndex, setClickedIndex] = useState(null);
+  const [toggle, setToggle] = useState(false);
 
   return (
-    <Box  >
-      <Typography sx={{margin:"90px 0px",[md]:{
-        fontSize:'25px',
-        margin:'60px 0px'
-      }}} variant='h4'>Your Recent Complaints</Typography>
-       {
-        complaints.map((com:any,ind:number)=>(
-            <React.Fragment key={ind}>
-            <Paper key={com._id} sx={{display:'flex',[md]:{flexDirection:"column"},justifyContent:'space-around',gap:"15px",alignItems:'center',marginBottom:"10px",padding:'10px 0px 10px 30px'}} elevation={2}>
-            <Typography sx={{fontSize:"1.2rem",[md]:{display:"none",fontSize:'1.5rem'}}} component='strong'>{ind+1}.</Typography>
-            <Typography sx={{fontSize:"1.2rem",textTransform:"capitalize"}} >Title: {com.complaintTitle}</Typography>
-            <Typography sx={{fontSize:"1.2rem",color:com.status=='pending'?"red":"green"}} >Status: {com.status}</Typography>
-            <Button  onClick={()=>{
-              seClickedIndex(ind)
-              setToggle(!toggle)
-          }}>view complaint</Button>
-            </Paper>
-           {
-            toggle&&clickedIndex==ind&& <Box component={'form'} sx={{width:'50%',[md]:{width:"100%"},margin:'20px auto'}} >
-            <Typography variant='h5'  component={"h3"}>Title: {com.complaintTitle}</Typography>
-            <Typography sx={{fontSize:"1.2rem",margin:"10px 0px"}} >Description: {com.complaintDescription}</Typography>
-              <CardMedia
-                component="img"
-                height="80"
-                sx={{height:"150px",width:"100%",objectFit:'contain'}}
-                image={com.imageUrl.slice(5,)}
+    <div className="container mx-auto my-20 px-4">
+      <h2 className="text-3xl sm:text-2xl font-semibold my-24 sm:my-16">Your Recent Complaints</h2>
+      {complaints.map((com:any, ind:any) => (
+        <React.Fragment key={ind}>
+          <div className="flex sm:flex-col justify-around gap-4 items-center mb-4 p-4 bg-white shadow-md rounded-lg">
+            <strong className="text-lg sm:hidden">{ind + 1}.</strong>
+            <p className="text-lg capitalize">Title: {com.complaintTitle}</p>
+            <p className={`text-lg ${com.status === 'pending' ? 'text-red-500' : 'text-green-500'}`}>Status: {com.status}</p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              onClick={() => {
+                setClickedIndex(ind);
+                setToggle(!toggle);
+              }}
+            >
+              View Complaint
+            </button>
+          </div>
+          {toggle && clickedIndex === ind && (
+            <div className="w-1/2 sm:w-full mx-auto my-5 p-4 bg-gray-100 rounded-lg">
+              <h3 className="text-xl font-semibold">Title: {com.complaintTitle}</h3>
+              <p className="text-lg my-2">Description: {com.complaintDescription}</p>
+              <img
+                className="h-40 w-full object-contain"
+                src={com.imageUrl.slice(5)}
                 alt="complaint image"
               />
-        </Box>
-           }
-            </React.Fragment>
-        ))
-       }
-    </Box>
-  )
-}
+            </div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
 
-export default Complaints
+export default Complaints;

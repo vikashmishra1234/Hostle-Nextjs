@@ -7,11 +7,11 @@ export async function middleware(request:NextRequest){
     if(!token && (url.pathname.startsWith('/hostler/dashboard'))){
         return NextResponse.redirect(new URL('/',request.url));
     }
-    if(token  && (url.pathname.startsWith('/hostler/login')) && (token.role=='student')){
-        return NextResponse.redirect(new URL('/hostler/dashboard',request.url));
-    }
     if(!token && (url.pathname.startsWith('/admin/dashboard'))){
         return NextResponse.redirect(new URL('/',request.url));
+    }
+    if(token  && (url.pathname.startsWith('/hostler/login')) && (token.role=='student')){
+        return NextResponse.redirect(new URL('/hostler/dashboard',request.url));
     }
     if(token && (token.role=='admin') && (url.pathname.startsWith('/login'))){
         return NextResponse.redirect(new URL('/admin/dashboard',request.url));
@@ -20,9 +20,11 @@ export async function middleware(request:NextRequest){
 
 export const config = {
     matcher:[
-        '/admin/dashboard/addstudent',
+        '/admin/dashboard',
         '/login',
         '/hostler/login',
         '/hostler/dashboard:path*',
+        '/admin/dashboard:path*',
+        '/admin/:path*',
     ]
 }

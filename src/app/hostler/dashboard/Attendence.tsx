@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { MarkAttendece } from "@/app/utils";
 import Swal from "sweetalert2";
 import Loader from "@/app/MyLoading";
+import axios from "axios";
 
 type User = {
   role?: string;
@@ -26,28 +27,12 @@ const Attendence: React.FC<AttendenceProps> = ({ user }) => {
   const fetchIpAddress = useCallback(async () => {
     setLoading("ip");
     try {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
-            alert(latitude+" "+longitude)
-            latitude = Math.floor(latitude)
-            longitude = Math.floor(longitude)
-            if((latitude==27||28||26)&&(longitude==76||77)){
-              alert("helo")
-              setIsHostler(false);
-              setShowModal(true);
-            }
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-          }
-        );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-      }
-     
+      const response = await fetch("https://api.ipify.org?format=json");
+      const { ip } = await response.json();
+      // console.log(ip)
+      // const ip = '103.175.77.130'
+      setIsHostler(ip !== "103.175.77.130"); // Adjust logic if needed
+      setShowModal(true);
     } catch (error) {
       console.error("Unable to fetch IP", error);
       Swal.fire({

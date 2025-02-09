@@ -3,17 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "vikash": "next dev --turbo",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
-    "@mui/icons-material": "^6.1.0",
-    "@mui/material": "^6.1.0",
-    "@mui/x-data-grid": "^7.17.0",
+    "@google/generative-ai": "^0.21.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/react-slick": "^0.23.13",
     "axios": "^1.7.7",

@@ -61,7 +61,6 @@ const ComplaintForm = () => {
     formData.studentName = user.studentName;
     formData.studentId = user.rollNumber;
     formData.studentYear = user.studentYear
-    console.log(formData)
     setLoading(true)
     const res = await RegisterComplaint(formData);
     // const res = false

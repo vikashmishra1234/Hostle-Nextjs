@@ -3,7 +3,7 @@
 import React from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Box, CardMedia } from '@mui/material';
+import Image from 'next/image';
 
 const ImageCarousel = () => {
   const images = [
@@ -36,25 +36,26 @@ const ImageCarousel = () => {
   };
 
   return (
-<Box sx={{ mt: 2, maxWidth: '100%', overflow: 'hidden' }}>
-  <Carousel 
-    responsive={responsive} 
-  
-  >
-    {images.map((image, index) => (
-      <Box key={index} sx={{ padding: 1 }}>
-        <CardMedia
-          component="img"
-          image={image}
-          alt={`slide-${index}`}
-          sx={{ borderRadius: '8px', height: '250px', objectFit: 'cover', width: '100%' }}
-        />
-      </Box>
-    ))}
-  </Carousel>
-</Box>
-
-
+    <div className="mt-2 w-full overflow-hidden">
+      <Carousel responsive={responsive}>
+        {images.map((image, index) => (
+          <div key={index} className="p-1">
+            <div className="relative h-[250px] w-full">
+              <Image
+                src={image}
+                alt={`slide-${index}`}
+                fill
+                className="rounded-lg object-cover"
+                sizes="(max-width: 464px) 100vw,
+                       (max-width: 768px) 50vw,
+                       (max-width: 1024px) 33vw,
+                       20vw"
+              />
+            </div>
+          </div>
+        ))}
+      </Carousel>
+    </div>
   );
 };
 

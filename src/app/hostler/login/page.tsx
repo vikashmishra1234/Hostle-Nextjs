@@ -1,111 +1,109 @@
-'use client'; // Ensure this file is treated as a client component
+'use client';
 
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { signIn, signOut } from 'next-auth/react';
-import React, { useState ,useEffect} from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import Loader from '@/app/MyLoading';
 
+const toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+});
+
+const getOrCreateUserId = (rollNumber: string) => {
+  let deviceId = localStorage.getItem('deviceId');
+  if (!deviceId) {
+    deviceId = uuidv4() + 'X' + rollNumber;
+    localStorage.setItem('deviceId', deviceId);
+    return true;
+  }
+  return deviceId.split('X')[1] === rollNumber;
+};
+
 const HostlerLogin = () => {
   const router = useRouter();
-  const [rollNumber, setRollNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading,setLoading] = useState(false);
+  const [formData, setFormData] = useState({ rollNumber: '', password: '' });
+  const [isLoading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const getOrCreateUserId = (rollNumber:string) => {
-      let deviceId = localStorage.getItem('deviceId');
-      if (!deviceId) {
-        deviceId = uuidv4()+'X'+rollNumber;
-        localStorage.setItem('deviceId', deviceId);
-        return true
-      }  
-      let savedrollNumber = deviceId.split('X')[1];
-      if(savedrollNumber!=rollNumber){
-        return false;
-      }
-      return true;
-      
-    };
-    
+    setLoading(true);
 
-setLoading(true);
-    const res = await signIn('credentials', {
-      redirect: false,
-      rollNumber, // Ensure this matches the provider's expected parameters
-      password,
-      role: 'student',
-    });
-setLoading(false);
-    if (res?.error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops!',
-        text: 'Login Failed!',
+    try {
+      const res = await signIn('credentials', {
+        redirect: false,
+        ...formData,
+        role: 'student',
       });
-    } else {
-      if(getOrCreateUserId(rollNumber)){
-        Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: 'Login successful!',
-        })
-        router.push('/hostler/dashboard')
-      }
-      else{
-        setLoading(true)
-        await signOut({redirect:false})
-        Swal.fire({
+
+      if (res?.error) {
+        toast.fire({
           icon: 'error',
-          title: 'Opps!',
-          text: 'device is not match!',
-        })
-        setLoading(false)
+          title: res.error || 'Login failed!',
+        });
+      } else {
+        if (getOrCreateUserId(formData.rollNumber)) {
+          toast.fire({ icon: 'success', title: 'Login successful!' });
+          router.push('/hostler/dashboard');
+        } else {
+          await signOut({ redirect: false });
+          toast.fire({ icon: 'error', title: 'Device does not match!' });
+        }
       }
+    } catch (error) {
+      toast.fire({ icon: 'error', title: 'An error occurred. Please try again.' });
+    } finally {
+      setLoading(false);
     }
   };
-if(isLoading){
-  return <Loader loading={isLoading}/>
-}
+
+  if (isLoading) return <Loader loading={isLoading} />;
+
   return (
-    <Container sx={{ height: 'calc(100vh - 100px)', paddingTop: '80px' }}>
-      <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: '500px', margin: 'auto' }}>
-        <Typography
-          sx={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}
-          variant="h4"
-        >
-          Hostler Login
-        </Typography>
-        <TextField
-          fullWidth
-          label="Enter roll number"
-          variant="filled"
-          type="text"
-          value={rollNumber}
-          onChange={(e) => setRollNumber(e.target.value)}
-          sx={{ marginBottom: '20px' }}
-        />
-        <TextField
-          fullWidth
-          label="Password"
-          variant="filled"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          sx={{ marginBottom: '20px' }}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ background: 'brown', width: '150px', height: '43px' }}
-        >
-          Login
-        </Button>
-      </Box>
-    </Container>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-4">Hostler Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Enter Roll Number</label>
+            <input
+              type="text"
+              name="rollNumber"
+              value={formData.rollNumber}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-[#8d2525] text-white py-2 rounded-md hover:bg-[#4f1616] transition duration-300"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
