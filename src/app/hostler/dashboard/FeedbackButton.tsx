@@ -28,7 +28,7 @@ const FeedbackButton: React.FC<{ user: any }> = ({ user }) => {
     }
 
     const feedbackData = {
-      quality: selectedValue,
+      qaulity: selectedValue,
       studentYear: user.studentYear,
       rollNumber: user.rollNumber,
       studentName: user.studentName,
@@ -37,6 +37,7 @@ const FeedbackButton: React.FC<{ user: any }> = ({ user }) => {
 
     setLoading(true);
     const res = await addFeedback(feedbackData);
+    console.log(res)
     setLoading(false);
 
     if (res) {
