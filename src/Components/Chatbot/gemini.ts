@@ -1,8 +1,8 @@
-import { fetchStudents, getAllStudentComplaints, getFeedback } from "@/app/utils";
+import { fetchStudents, getAllStudentComplaints, getFeedback, getStudentComplaint, getStudentDetails } from "@/app/utils";
 import { Student } from "@/types/types";
-import { GoogleGenerativeAI } from "@google/generative-ai"; 
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const apiKey = process.env.NEXT_PUBLIC_GEMINI_API ||'your-api key';
+const apiKey = process.env.NEXT_PUBLIC_GEMINI_API || 'your-api-key';
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const model = genAI.getGenerativeModel({
@@ -17,18 +17,18 @@ const generationConfig = {
   responseMimeType: "text/plain",
 };
 
-// A function to fetch student data, complaints, and feedbacks and initialize the chat session
+let chatSession: any = null; // Store chat session globally
+
 const fetchStudentsAndInitChat = async () => {
   try {
-    const students: Student[] | null = await fetchStudents(); 
-    const complaints:any = await getAllStudentComplaints();
-    const feedback:any = await getFeedback();
+    const students: Student[] | null = await fetchStudents();
+    const complaints: any = await getAllStudentComplaints(true);
+    const feedback: any = await getFeedback();
 
     if (!students || students.length === 0) {
       throw new Error("No students found.");
     }
 
-    // Format the student data for chat history
     const history = students.map((studentData) => ({
       role: "user",
       parts: [
@@ -46,8 +46,8 @@ const fetchStudentsAndInitChat = async () => {
       ],
     }));
 
-    // Add complaints to the history
-    complaints.forEach((complaint:any) => {
+    // Add complaints
+    complaints.forEach((complaint: any) => {
       history.push({
         role: "user",
         parts: [
@@ -65,8 +65,8 @@ const fetchStudentsAndInitChat = async () => {
       });
     });
 
-    // Add feedback to the history
-    feedback.forEach((feedbackData:any) => {
+    // Add feedback
+    feedback.forEach((feedbackData: any) => {
       history.push({
         role: "user",
         parts: [
@@ -75,7 +75,7 @@ const fetchStudentsAndInitChat = async () => {
               **Student Name:** ${feedbackData.studentName}
               **Roll Number:** ${feedbackData.rollNumber}
               **Year:** ${feedbackData.studentYear}
-              **Quality:** ${feedbackData.qaulity}
+              **Quality:** ${feedbackData.quality}  // Fix typo here
               **Feedback Description:** ${feedbackData.description}
             `,
           },
@@ -83,39 +83,101 @@ const fetchStudentsAndInitChat = async () => {
       });
     });
 
-    // Start the chat session with the initial history
-    const chatSession = model.startChat({
+    // Start the chat session
+    chatSession = model.startChat({
       generationConfig,
       history,
     });
 
     return { chatSession, history };
   } catch (error) {
-    console.error("Error fetching students or initializing chat:", error);
+    console.error("Error initializing chat:", error);
     return { chatSession: null, history: [] };
   }
 };
 
-const run = async (input: string) => {
-   
-  const { chatSession, history } = await fetchStudentsAndInitChat();
+// Function to initialize chatbot
+const initializeStudentBot = async(studentId:string|null)=>{
+  console.log("this is sutdel")
+    const complaints = await getStudentComplaint(studentId,true);
+    const aboutStudent:Student|null = await getStudentDetails(studentId);
+    if(!complaints || !aboutStudent){
+      return false;
+    }
+    const history = complaints.map((complaint:any) => ({
+      role: "user",
+      parts: [
+        {
+          text: `
+            **Complaint Title:** ${complaint.complaintTitle}
+            **Student Name:** ${complaint.studentName}
+            **Year:** ${complaint.studentYear}
+            **Complaint Description:** ${complaint.complaintDescription}
+            **Status:** ${complaint.status}
+            ${complaint.imageUrl ? `**Image URL:** ${complaint.imageUrl}` : ""}
+          `,
+        },
+      ],
+    }));
 
-  if (!chatSession) {
+      history.push({
+        role: "user",
+        parts: [
+          {
+            text: `
+              You have serve for students. following are my details
+              **My Roll No:** ${aboutStudent.rollNumber}
+              **My Name:** ${aboutStudent.studentName}
+              **My Father Name:** ${aboutStudent.studentFatherName}
+              **My Phone:** ${aboutStudent.studentPhone}
+              **My Email:** ${aboutStudent.studentEmail}
+              **Fee Submitted:** ${aboutStudent.feeStatus ? "Yes" : "No"}
+              **My Address:** ${aboutStudent.studentAddress}
+            `,
+          },
+        ],
+      });
+
+
+      chatSession = model.startChat({
+        generationConfig,
+        history,
+      });
+      if(!chatSession){
+        return false
+      }
+      return true
+  
+    
+    
+}
+const initializeChatbot = async () => {
+  const { chatSession: session } = await fetchStudentsAndInitChat();
+  if (!session) {
     console.error("Chat session could not be initialized.");
-    return;
+    return false;
   }
-
-  // Send user input to the model and get the response
-  const result = await chatSession.sendMessage(input);
-
-  // Append the latest user input and response to the history
-  history.push(
-    { role: "user", parts: [{ text: input }] },
-    { role: "assistant", parts: [{ text: result.response.text() }] }
-  );
-
-  console.log(result.response.text());
-  return result.response.text();
+  return true;
 };
 
-export default run;
+// Function to send messages to chatbot
+const run = async (input: string) => {
+  if (!chatSession) {
+    console.error("Chat session is not initialized.");
+    return null;
+  }
+
+  const result = await chatSession.sendMessage(input);
+  const responseText = await result.response.text(); // Fix text extraction
+
+  return responseText;
+};
+
+// Export the chatbot functions
+const obj = {
+  initializeBot: initializeChatbot,
+  initializeStudentBot,
+  runBot: run,
+};
+
+export default obj;

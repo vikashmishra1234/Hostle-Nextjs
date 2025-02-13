@@ -1,9 +1,9 @@
 "use client";
-
 import React from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Image from 'next/image';
+import { Home } from 'lucide-react'; // Importing the Home icon from lucide-react
 
 const ImageCarousel = () => {
   const images = [
@@ -36,19 +36,25 @@ const ImageCarousel = () => {
   };
 
   return (
-    <div className="mt-2 w-full overflow-hidden">
-      <Carousel responsive={responsive}>
+    <div className="my-10 mx-auto w-full md:w-11/12 lg:w-10/12 overflow-hidden px-4">
+      {/* Improved Heading with Icon */}
+      <div className="flex items-center  gap-2 py-10">
+        <Home className="text-blue-500 w-8 h-8" /> {/* Icon added next to the title */}
+        <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-gray-700">Inside The BSA College Hostel</h2>
+      </div>
+
+      <Carousel  responsive={responsive}>
         {images.map((image, index) => (
-          <div key={index} className="p-1">
-            <div className="relative h-[250px] w-full">
+          <div key={index} className="p-2 md:p-4">
+            <div className="relative w-full h-[250px] md:h-[350px] lg:h-[400px]">
               <Image
                 src={image}
                 alt={`slide-${index}`}
                 fill
-                className="rounded-lg object-cover"
-                sizes="(max-width: 464px) 100vw,
-                       (max-width: 768px) 50vw,
-                       (max-width: 1024px) 33vw,
+                className="rounded-lg object-cover shadow-lg"
+                sizes="(max-width: 464px) 100vw, 
+                       (max-width: 768px) 50vw, 
+                       (max-width: 1024px) 33vw, 
                        20vw"
               />
             </div>

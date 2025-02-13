@@ -18,7 +18,7 @@ const page = async () => {
     return <div>unable to show anything</div>;
   }
 
-  const complaints = await getAllStudentComplaints();
+  const complaints = await getAllStudentComplaints(false);
   const feedbacks = await getFeedback();
   const students:Student[]|null = await fetchStudents();
 

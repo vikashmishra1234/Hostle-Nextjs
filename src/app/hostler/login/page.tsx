@@ -71,6 +71,10 @@ const HostlerLogin = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+      <div>
+        <h2>Id: 2100650100112</h2>
+        <h2>Pass: 210065</h2>
+      </div>
         <h2 className="text-2xl font-bold text-center mb-4">Hostler Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -97,7 +101,7 @@ const HostlerLogin = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#8d2525] text-white py-2 rounded-md hover:bg-[#4f1616] transition duration-300"
+            className="w-full bg-[#696868] text-white py-2 rounded-md hover:bg-[#4b4a4a] transition duration-300"
           >
             Login
           </button>

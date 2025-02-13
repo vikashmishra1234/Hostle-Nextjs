@@ -8,6 +8,7 @@ import { endOfDay, startOfDay, subDays } from "date-fns";
 import { sendEmail } from "./utils/Nodemailer";
 import { Student } from "@/types/types";
 
+
 export const fetchStudents = async()=>{
   try {
     await connectToDatabase();
@@ -20,6 +21,21 @@ export const fetchStudents = async()=>{
   } catch (error: any) {
     console.error('Error fetching student data:', error.message);
     return null;
+  }
+}
+export const getStudentDetails = async(rollNumber:string|null):Promise<Student|null>=>{
+  try {
+    await connectToDatabase();
+    if(!rollNumber){
+      return null;
+    }
+    const student = await Students.findOne({rollNumber});
+    if(!student){
+      return null;
+    }
+    return student;
+  } catch (error) {
+    return null
   }
 }
 
@@ -48,7 +64,7 @@ export const RegisterComplaint = async(data:any):Promise<boolean>=>{
         console.log("studentId not found");
         return false
       }
-      const isSent = await sendEmail(data.complaintTitle,data.complaintDescription,data.imageUrl)
+      const isSent = await sendEmail(data.complaintTitle,data.complaintDescription,data.imageUrl,"")
       if(!isSent){
         console.log("email is not sent")
         return false
@@ -62,16 +78,22 @@ export const RegisterComplaint = async(data:any):Promise<boolean>=>{
       return false;
     }
 }
-export const getStudentComplaint = async(rollNumber:any):Promise<any>=>{
+export const getStudentComplaint = async(rollNumber:any,isAll:boolean):Promise<any>=>{
     try {
       await connectToDatabase();
       if(!rollNumber){
         console.log("rollNumber not found");
         return false
       }
-
+      if(isAll){
+        const studentComplaints = await Complaint.find({studentId:rollNumber})
+        if(studentComplaints?.length==0){
+          return null
+        }
+        return studentComplaints;
+      }
          const today = new Date();
-    const yesterday = subDays(today, 1); 
+    const yesterday = subDays(today, 7); 
 
     const studentComplaint = await Complaint.find({
       studentId:rollNumber,
@@ -95,10 +117,16 @@ export const getStudentComplaint = async(rollNumber:any):Promise<any>=>{
     }
 }
 
-export const getAllStudentComplaints = async()=>{
+export const getAllStudentComplaints = async(isAll:null|boolean)=>{
   try {
     await connectToDatabase();
-
+    if(isAll){
+      const getData = await Complaint.find({});
+      if(getData){
+        return getData;
+      }
+      return false
+    }
     const today = new Date();
     const yesterday = subDays(today, 7);
 

@@ -1,31 +1,38 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Book, Home, Utensils, Bell, Calendar, Sun, Moon, Sunrise } from 'lucide-react'
-import Link from 'next/link'
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Book, Utensils, Sun, Moon, Sunrise, ArrowLeftCircle } from "lucide-react";
+import Link from "next/link";
 
 interface WelcomeContentProps {
-  studentName: string
+  studentName: string;
 }
 
+interface GreetingData {
+  text: string;
+  icon: JSX.Element;
+}
+
+const greetings: Record<string, GreetingData> = {
+  morning: { text: "Good morning", icon: <Sunrise className="w-8 h-8 text-blue-600" /> },
+  afternoon: { text: "Good afternoon", icon: <Sun className="w-8 h-8 text-yellow-500" /> },
+  evening: { text: "Good evening", icon: <Moon className="w-8 h-8 text-gray-500" /> },
+};
+
 export default function WelcomeContent({ studentName }: WelcomeContentProps) {
-  const [greeting, setGreeting] = useState('')
-  const [icon, setIcon] = useState<JSX.Element>(<Sun className="w-8 h-8" />)
+  const [greeting, setGreeting] = useState<GreetingData>(greetings.morning);
 
   useEffect(() => {
-    const currentHour = new Date().getHours()
+    const currentHour = new Date().getHours();
     if (currentHour < 12) {
-      setGreeting('Good morning')
-      setIcon(<Sunrise className="w-8 h-8" />)
+      setGreeting(greetings.morning);
     } else if (currentHour < 18) {
-      setGreeting('Good afternoon')
-      setIcon(<Sun className="w-8 h-8" />)
+      setGreeting(greetings.afternoon);
     } else {
-      setGreeting('Good evening')
-      setIcon(<Moon className="w-8 h-8" />)
+      setGreeting(greetings.evening);
     }
-  }, [])
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-16">
@@ -33,82 +40,125 @@ export default function WelcomeContent({ studentName }: WelcomeContentProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+        className="bg-gray-100 rounded-3xl shadow-lg overflow-hidden"
       >
-        <div className="p-8 md:p-12">
-          <motion.div 
-            className="flex items-center mb-8"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-          >
-            {icon}
-            <h1 className="text-4xl md:text-5xl font-bold text-brown-800 ml-4">
-              {greeting}, {studentName}!
-            </h1>
-          </motion.div>
-          
-          <motion.p 
-            className="text-xl text-brown-600 mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-          >
-            Welcome to your cozy corner of learning and growth. What's on your agenda today?
-          </motion.p>
-          
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-          >
-            <QuickAccessCard icon={<Book />} link='/hostler/registercomplaint' title="Report Complaint" color="bg-red-500" />
-            <QuickAccessCard icon={<Home />} link='#' title="Hostel Services" color="bg-green-600" />
-            <QuickAccessCard icon={<Utensils />} link='#meal' title="Meal Schedule" color="bg-orange-500" />
-          </motion.div>
-          
-          <motion.div 
-            className="bg-brown-50 p-6 rounded-2xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-          >
-            <h2 className="text-2xl font-semibold text-brown-800 mb-4 flex items-center">
-              <Calendar className="w-6 h-6 mr-2" />
-              Today's Highlights
-            </h2>
-            <ul className="space-y-3">
-              <HighlightItem text="No Highlights For Now" />
-              <HighlightItem text="No Highlights For Now" />
-              <HighlightItem text="No Highlights For Now" />
-            </ul>
-          </motion.div>
+        <div className="p-6 md:p-12">
+          <WelcomeHeader greeting={greeting} studentName={studentName} />
+          <WelcomeMessage />
+          <QuickAccessGrid />
+          <AdditionalContent />
+          {/* <BackButton /> */}
         </div>
       </motion.div>
     </div>
-  )
+  );
 }
 
-function QuickAccessCard({ icon, title, color,link }: { icon: JSX.Element, title: string, color: string,link:string }) {
+function WelcomeHeader({ greeting, studentName }: { greeting: GreetingData; studentName: string }) {
   return (
-    <Link href={link}>
-            <motion.div 
-      className={`${color} rounded-2xl p-6 text-white flex items-center justify-between cursor-pointer transition-transform duration-300 ease-in-out transform hover:scale-105`}
-      whileHover={{ y: -5 }}
+    <motion.div
+      className="flex items-center mb-6 md:mb-8"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8 }}
     >
-      <span className="text-xl font-semibold">{title}</span>
-      {icon}
+      {greeting.icon}
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-800 ml-4">
+        {greeting.text}, {studentName}!
+      </h1>
     </motion.div>
-    </Link>
-  )
+  );
 }
 
-function HighlightItem({ text }: { text: string }) {
+function WelcomeMessage() {
   return (
-    <li className="flex items-center text-brown-700">
-      <Bell className="w-5 h-5 mr-2 text-brown-500" />
-      {text}
-    </li>
-  )
+    <motion.p
+      className="text-lg md:text-xl text-gray-600 mb-6 md:mb-10"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.8 }}
+    >
+      Welcome to your cozy corner of learning and growth. What’s on your agenda today?
+    </motion.p>
+  );
+}
+
+function QuickAccessGrid() {
+  return (
+    <motion.div
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.8 }}
+    >
+      <QuickAccessCard
+        icon={<Book className="w-6 h-6" />}
+        link="/hostler/registercomplaint"
+        title="Report Complaint"
+        color="bg-gray-700 text-white"
+      />
+      <QuickAccessCard
+        icon={<Utensils className="w-6 h-6" />}
+        link="#meal"
+        title="Meal Schedule"
+        color="bg-blue-600 text-white"
+      />
+    </motion.div>
+  );
+}
+
+function QuickAccessCard({
+  icon,
+  title,
+  color,
+  link,
+}: {
+  icon: JSX.Element;
+  title: string;
+  color: string;
+  link: string;
+}) {
+  return (
+    <Link href={link} className="block">
+      <motion.div
+        className={`${color} rounded-lg p-6 flex items-center justify-between cursor-pointer transition-all duration-300 ease-in-out hover:shadow-lg`}
+        whileHover={{ y: -5 }}
+      >
+        <span className="text-lg font-semibold">{title}</span>
+        {icon}
+      </motion.div>
+    </Link>
+  );
+}
+
+function AdditionalContent() {
+  return (
+    <motion.div
+      className="bg-white p-6 rounded-lg shadow-md text-gray-700"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.6, duration: 0.8 }}
+    >
+      {/* Add your additional content here */}
+      <p className="text-center">More features coming soon!</p>
+    </motion.div>
+  );
+}
+
+function BackButton() {
+  return (
+    <motion.div
+      className="mt-6 flex justify-center"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.8, duration: 0.8 }}
+    >
+      {/* <Link href="/hostler/dashboard">
+        <button className="flex items-center gap-2 bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-all">
+          <ArrowLeftCircle className="w-5 h-5" />
+          Back to Dashboard
+        </button>
+      </Link> */}
+    </motion.div>
+  );
 }
